@@ -1,5 +1,8 @@
 import sys
 
+import PyQt5
+from PyQt5.QtWidgets import QApplication, QWidget
+from PyQt5.QtCore import Qt, QEvent
 from PyQt5.QtWidgets import (
     QApplication,
     QAction,
@@ -18,164 +21,93 @@ from task1 import save_as_csv, scan_dataset
 from task2 import copy_dataset, scan_annotation
 from task3 import randomized_dataset_copy
 
-class Window(QMainWindow):
 
-    def window(self) -> None:
-        """
-        Данная функция размещает элементы по макету
-        """
-        self.setWindowTitle("Tigers & Leopards")
-        self.setWindowIcon(QIcon("icon/tigers.png"))
-        self.centralWidget = QWidget()
-        self.setCentralWidget(self.centralWidget)
-        self.setStyleSheet("background-color: #FFEEDD;")
+class MainWindow():
+    class MainWindow(QMainWindow):
+        def __init__(self)-> None:
+            super().__init__()
 
-        button_tiger = QPushButton("< Next tiger", self)
-        button_tiger.setFixedSize(100, 50)
-        button_tiger.setStyleSheet("QPushButton {background-color: #B8B8FF}")
-        button_leopard = QPushButton("Next leopard >", self)
-        button_leopard.setFixedSize(100, 50)
-        button_leopard.setStyleSheet("QPushButton {background-color: #B8B8FF}")
-
-        pixmap = QPixmap("icon/main_img.jpg")
-        self.lbl = QLabel(self)
-        self.lbl.setPixmap(pixmap)
-        self.lbl.setAlignment(Qt.AlignCenter)
-
-        box = QHBoxLayout()
-        box.addSpacing(1)
-        box.addWidget(button_tiger)
-        box.addWidget(self.lbl)
-        box.addWidget(button_leopard)
-
-        self.centralWidget.setLayout(box)
-
-        button_tiger.clicked.connect(self.next_cat)
-        button_leopard.clicked.connect(self.next_dog)
-
-        self.folderpath = " "
-
-        self.showMaximized()
-
-    def create_iter(self) -> None:
-        """
-        Данная функция создает два объекта-итератора
-        """
-        self.tiger = ClassedDatasetIterator("tiger", "dataset")
-        self.leopard = ClassedDatasetIterator("leopard", "dataset")
-
-    def next_tiger(self) -> None:
-        """
-        Данная функция получает путь к следующему изображению tiger и размещает на экране
-        """
-        lbl_size = self.lbl.size()
-        next_image = next(self.tiger)
-        if next_image != None:
-            img = QPixmap(next_image).scaled(
-                lbl_size, aspectRatioMode=Qt.KeepAspectRatio
-            )
-            self.lbl.setPixmap(img)
-            self.lbl.setAlignment(Qt.AlignCenter)
-        else:
+            self.main_window()
             self.create_iter()
-            self.next_tiger()
 
-    def __init__(self):
-        """
-        Данный конструктор вызывает методы для создания окна
-        """
-        super().__init__()
+        def main_window(self) -> None:
+            """
+            Данная функция размещает элементы по макету
+            """
+            self.setWindowTitle("Images Cats and Dogs")
+            self.setWindowIcon(QIcon("icon/cat_dog.png"))
+            self.centralWidget = QWidget()
+            self.setCentralWidget(self.centralWidget)
+            self.setStyleSheet("background-color: #FFFFFF;")
 
-        self.main_window()
-        self.create_iter()
-        self.add_menu_bar()
+            button_horse = QPushButton("Next horse", self)
+            button_horse.setFixedSize(300, 150)
+            button_horse.setStyleSheet("QPushButton")
+            button_zebra = QPushButton("Next zebra", self)
+            button_zebra.setFixedSize(300, 150)
+            button_zebra.setStyleSheet("QPushButton")
 
-    def next_leopard(self) -> None:
-        """
-        Данная функция получает путь к следующему изображению dog и размещает на экране
-        """
-        lbl_size = self.lbl.size()
-        next_image = next(self.leopard)
-        if next_image != None:
-            img = QPixmap(next_image).scaled(
-                lbl_size, aspectRatioMode=Qt.KeepAspectRatio
-            )
-            self.lbl.setPixmap(img)
+            pixmap = QPixmap()
+            self.lbl = QLabel(self)
+            self.lbl.setPixmap(pixmap)
             self.lbl.setAlignment(Qt.AlignCenter)
-        else:
-            self.create_iter()
-            self.next_leopard()
 
-    def add_menu_bar(self) -> None:
-        """
-        Данная функция создает меню и добавляет к нему действия
-        """
-        menu_bar = self.menuBar()
+            box = QHBoxLayout()
+            box.addSpacing(1)
+            box.addWidget(button_horse)
+            box.addWidget(self.lbl)
+            box.addWidget(button_zebra)
 
-        self.file_menu = menu_bar.addMenu("&File")
-        self.change_action = QAction(QIcon("icon/blue-folder.png"), "&Change dataset")
-        self.change_action.triggered.connect(self.changeDataset)
-        self.file_menu.addAction(self.change_action)
+            self.centralWidget.setLayout(box)
 
-        self.annotation_menu = menu_bar.addMenu("&Annotation")
-        self.create_annot_action = QAction(QIcon("icon/csv.png"), "&Create annotation")
-        self.create_annot_action.triggered.connect(self.create_annotation)
-        self.annotation_menu.addAction(self.create_annot_action)
+            button_horse.clicked.connect(self.next_cat)
+            button_zebra.clicked.connect(self.next_dog)
 
-        self.datasets_menu = menu_bar.addMenu("&Datasets")
-        self.create_database_2_action = QAction(
-            QIcon("icon/blue-folders.png"), "&Create dataset2"
-        )
-        self.create_database_2_action.triggered.connect(self.createDataset2)
-        self.datasets_menu.addAction(self.create_database_2_action)
+            self.folderpath = " "
+            self.showMaximized()
 
-    def create_annotation(self) -> None:
-        """
-        Данная функция создает аннотацию для текущего dataset
-        """
-        if "task2_dataset" in str(self.folderpath):
-            task2_annotation()
-        elif "task3_dataset" in str(self.folderpath):
-            task3_annotation()
-        elif "dataset" in str(self.folderpath):
-            annotation()
 
-    def createDataset2(self) -> None:
-        """
-        Данная функция создает dataset_2
-        """
-        task2_dataset()
-        self.create_database_3_action = QAction(
-            QIcon("icon/blue-folders-stack.png"), "&Create dataset3"
-        )
-        self.create_database_3_action.triggered.connect(self.createDataset3)
-        self.datasets_menu.addAction(self.create_database_3_action)
+        def create_iter(self) -> None:
+            self.cat = ClassedDatasetIterator("bay horse", ["dataset\\bay horse"])
+            self.dog = ClassedDatasetIterator("zebra", ["dataset\\zebra"])
 
-    def createDataset3(self) -> None:
-        """
-        Данная функция создает dataset_3
-        """
-        task3_dataset()
+        def next_cat(self) -> None:
+            lbl_size = self.lbl.size()
+            next_image = next(self.cat)
+            if next_image != None:
+                img = QPixmap(next_image).scaled(
+                    lbl_size, aspectRatioMode=Qt.KeepAspectRatio
+                )
+                self.lbl.setPixmap(img)
+                self.lbl.setAlignment(Qt.AlignCenter)
+            else:
+                self.create_iter()
+                self.next_cat()
 
-    def changeDataset(self) -> None:
-        """
-        Данная функция изменяет текущий dataset
-        """
-        self.folderpath = self.folderpath = QFileDialog.getExistingDirectory(
-            self, "Select Folder"
-        )
+        def next_dog(self) -> None:
+            lbl_size = self.lbl.size()
+            next_image = next(self.dog)
+            if next_image != None:
+                img = QPixmap(next_image).scaled(
+                    lbl_size, aspectRatioMode=Qt.KeepAspectRatio
+                )
+                self.lbl.setPixmap(img)
+                self.lbl.setAlignment(Qt.AlignCenter)
+            else:
+                self.create_iter()
+                self.next_dog()
+
+
 
 
 def main() -> None:
-    """
-    Данная функция создает приложение
-    """
-    app = QApplication(sys.argv)
-    window = Window()
 
+    app = QApplication(sys.argv)
+    window = QWidget()
+    window.show()
+    window = MainWindow()
     sys.exit(app.exec_())
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
-
