@@ -39,10 +39,20 @@ def randomized_dataset_copy(dataset: list[list[str]], copy_path: str) -> list[li
         result.append([os.path.abspath(fr'{copy_path}\{img_name}'), fr'{copy_path}\{img_name}', img_class])
     return result
 
+def dataset_3(annotation_path: str) -> None:
+    """Creates copy of a dataset as in task 3 and creates annotation
 
-if __name__ == "__main__":
-    data = scan_annotation('annotation.csv')
+    Args:
+        annotation_path (str): Annotation of given dataset
+    """
+    data = scan_annotation(annotation_path)
     columns = data.pop(0)
+    new_data = randomized_dataset_copy(data, 'dataset_3')
+    save_as_csv(new_data, columns, 'dataset_3_annotation.csv')
+
+# if __name__ == "__main__":
+#     data = scan_annotation('annotation.csv')
+#     columns = data.pop(0)
     
-    new_data = randomized_dataset_copy(data, 'task3_dataset')
-    save_as_csv(new_data, columns, 'task3_annotation.csv')
+#     new_data = randomized_dataset_copy(data, 'task3_dataset')
+#     save_as_csv(new_data, columns, 'task3_annotation.csv')
