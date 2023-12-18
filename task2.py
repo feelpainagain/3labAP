@@ -1,9 +1,9 @@
 import os
+
 import csv
 import cv2
-import pandas as pd
 
-from main import save_as_csv
+from task1 import save_as_csv
 
 def scan_annotation(annotation_path: str) -> list[list[str]]:
     """func that scans annotation in given path and return data in matrix

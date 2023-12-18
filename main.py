@@ -40,12 +40,12 @@ class MainWindow():
             self.setCentralWidget(self.centralWidget)
             self.setStyleSheet("background-color: #FFFFFF;")
 
-            button_horse = QPushButton("Next horse", self)
-            button_horse.setFixedSize(300, 150)
-            button_horse.setStyleSheet("QPushButton")
-            button_zebra = QPushButton("Next zebra", self)
-            button_zebra.setFixedSize(300, 150)
-            button_zebra.setStyleSheet("QPushButton")
+            button_tiger = QPushButton("Next tiger", self)
+            button_tiger.setFixedSize(300, 150)
+            button_tiger.setStyleSheet("QPushButton")
+            button_leopard = QPushButton("Next leopard", self)
+            button_leopard.setFixedSize(300, 150)
+            button_leopard.setStyleSheet("QPushButton")
 
             pixmap = QPixmap()
             self.lbl = QLabel(self)
@@ -54,26 +54,26 @@ class MainWindow():
 
             box = QHBoxLayout()
             box.addSpacing(1)
-            box.addWidget(button_horse)
+            box.addWidget(button_tiger)
             box.addWidget(self.lbl)
-            box.addWidget(button_zebra)
+            box.addWidget(button_leopard)
 
             self.centralWidget.setLayout(box)
 
-            button_horse.clicked.connect(self.next_cat)
-            button_zebra.clicked.connect(self.next_dog)
+            button_tiger.clicked.connect(self.next_tiger)
+            button_leopard.clicked.connect(self.next_leopard)
 
             self.folderpath = " "
             self.showMaximized()
 
 
         def create_iter(self) -> None:
-            self.cat = ClassedDatasetIterator("bay horse", ["dataset\\bay horse"])
-            self.dog = ClassedDatasetIterator("zebra", ["dataset\\zebra"])
+            self.tiger = ClassedDatasetIterator("tiger", ["dataset\\tiger"])
+            self.leopard = ClassedDatasetIterator("leopard", ["dataset\\leopard"])
 
-        def next_cat(self) -> None:
+        def next_tiger(self) -> None:
             lbl_size = self.lbl.size()
-            next_image = next(self.cat)
+            next_image = next(self.tiger)
             if next_image != None:
                 img = QPixmap(next_image).scaled(
                     lbl_size, aspectRatioMode=Qt.KeepAspectRatio
@@ -82,11 +82,11 @@ class MainWindow():
                 self.lbl.setAlignment(Qt.AlignCenter)
             else:
                 self.create_iter()
-                self.next_cat()
+                self.next_tiger()
 
-        def next_dog(self) -> None:
+        def next_leopard(self) -> None:
             lbl_size = self.lbl.size()
-            next_image = next(self.dog)
+            next_image = next(self.leopard)
             if next_image != None:
                 img = QPixmap(next_image).scaled(
                     lbl_size, aspectRatioMode=Qt.KeepAspectRatio
@@ -95,7 +95,7 @@ class MainWindow():
                 self.lbl.setAlignment(Qt.AlignCenter)
             else:
                 self.create_iter()
-                self.next_dog()
+                self.next_leopard()
 
 
 

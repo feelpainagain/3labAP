@@ -5,7 +5,7 @@ import cv2
 import pandas as pd
 
 from task2 import scan_annotation
-from main import save_as_csv
+from task1 import save_as_csv
 
 
 def randomized_dataset_copy(dataset: list[list[str]], copy_path: str) -> list[list[str]]:
